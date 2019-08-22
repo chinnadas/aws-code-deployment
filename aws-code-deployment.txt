@@ -160,7 +160,7 @@ vi /etc/phpmyadmin/apache.conf
     Allow from 68.24.9.0/24     (change your ip range)
 
     <IfModule mod_php5.c>
-*****************************************
+********************************************
 
 
 if need you follow this below steps
@@ -190,20 +190,10 @@ sudo htpasswd /etc/phpmyadmin/.htpasswd additionaluser
 https://domain_name_or_IP/phpmyadmin
 
 
-demo project-Aws-labs
-=====================
+demo project for aws-code deploy
+================================
 https://bitbucket.org/awslabs/aws-codedeploy-bitbucket-pipelines-python
 https://bitbucket.org/vijayraj1933/aws-code-deploy/src/master/
 https://bitbucket.org/sanjivak/sample/src/master/
-
-
-
-
-
-
-
-
-
-
 
 
