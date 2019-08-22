@@ -1,0 +1,192 @@
+AWS CODE DEPLOYMENT WITH BIT BUCKET PIPELINE
+===========================================
+
+1. CREATE IAM USER # for AccessKey and Secret Key
+2. CREATE ROLE WITH (AWSCODEDEPLOY,EC2,S3) FULL PERMISSIONS
+3. CREATE TRUSTED RELATION SHIP FOR CODE DEPLOY
+
+##########################################
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+            "ec2.amazonaws.com",
+            "codedeploy.us-west-2.amazonaws.com"
+        ]
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+##########################################
+
+
+4.CREATE APPLICATION IN AWS CODE DEPLOY WITH EC2/on-permissions
+5.CREATE EC2 INSTANCE WITH ROLE 
+6.CREATE DEPLOYMENT GROUP WITH settings CodeDeployDefault.OneAtATime
+7.CREATE S3 BUCKET WITH PUBLIC ACCESS
+8.ATTACHED IAM ROLE TO EC2 INSTANCE
+9.INSTALL AWS CODE DEPLOY AGENT IN EC2
+10.ASSIGN ELASTIC IP FOR EC2 INSTANCE
+
+########################################################################
+wget https://bucket-name.s3.region-identifier.amazonaws.com/latest/install
+
+(INSTALL INSTEED OF ABOVE)
+
+wget https://aws-codedeploy-us-west-2.s3.amazonaws.com/latest/install
+#########################################################################
+
+
+Repository variables in BitBucket
+=================================
+
+VARIABLES
+============
+AWS_ACCESS_KEY_ID  =  *****************
+
+AWS_SECRET_ACCESS_KEY = *************** 
+
+AWS_DEFAULT_REGION =  us-west-2
+
+APPLICATION_NAME   =  aws-code-deploy-application
+
+
+DEPLOYMENT_CONFIG  = CodeDeployDefault.OneAtATime
+
+DEPLOYMENT_GROUP_NAME = aws-code-deploy-group
+
+S3_BUCKET = aws-code-deploy-s3-bucket
+
+PHP LAMP STACK INSTALLATION IN UBUNTU 18.04
+===========================================
+
+## https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu
+
+1.Install Apache
+
+   sudo apt-get update
+   sudo apt-get install apache2
+   sudo systemctl start apache2
+   sudo systemctl enable apache2
+   sudo systemctl status apache2
+
+2. install mysql
+ 
+  sudo apt-get install mysql-server libapache2-mod-auth-mysql php5-mysql -y
+  sudo mysql_install_db   (for activate)
+  sudo /usr/bin/mysql_secure_installation
+
+  ###Configuring Password Access for the MySQL Root Account
+
+  sudo mysql
+  SELECT user,authentication_string,plugin,host FROM mysql.user;
+  ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';  (password change as your wish)
+  FLUSH PRIVILEGES;
+  SELECT user,authentication_string,plugin,host FROM mysql.user;
+  sudo mysql
+  mysql -u root -p
+## From there, create a new user and give it a strong password:
+   CREATE USER 'das'@'localhost' IDENTIFIED BY 'password';
+   GRANT ALL PRIVILEGES ON *.* TO 'das'@'localhost' WITH GRANT OPTION;
+  exit
+ 
+3.Install PHP
+  sudo apt-get install php5 libapache2-mod-php5 php5-mcrypt -y
+  sudo nano /etc/apache2/mods-enabled/dir.conf
+===================================================================================================
+<IfModule mod_dir.c>
+
+          DirectoryIndex index.php index.html index.cgi index.pl index.php index.xhtml index.htm
+
+</IfModule>
+====================================================================================================
+4. ## list of php modules
+   ## apt-cache search php5-
+   ## sudo apt-get install name of the module
+
+
+5. sudo nano /var/www/info.php
+
+    <?php
+phpinfo();
+?>  
+
+6. sudo service apache2 restart
+
+
+  
+ 
+php-myadmin
+============
+## https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-18-04
+
+
+
+1. Installing phpMyAdmin
+  sudo apt update
+  sudo apt install phpmyadmin php-mbstring php-gettext -y
+  sudo phpenmod mbstring
+  sudo systemctl restart apache2
+
+
+#####http://your_domain_or_IP/phpmyadmin (incase you don't get phpmyadmin login page follow below commands)
+
+###php myadmin error correction link 
+
+#####https://askubuntu.com/questions/668734/the-requested-url-phpmyadmin-was-not-found-on-this-server
+
+sudo ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
+
+sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
+
+sudo service apache2 restart
+
+
+if need you follow this below steps
+
+2. Securing Your phpMyAdmin Instance
+
+ sudo nano /etc/apache2/conf-available/phpmyadmin.conf
+############# 
+<Directory /usr/share/phpmyadmin>
+    Options FollowSymLinks
+    DirectoryIndex index.php
+    AllowOverride All
+    . . .
+#############
+ sudo systemctl restart apache2
+
+ sudo nano /usr/share/phpmyadmin/.htaccess
+#############   
+   AuthType Basic
+   AuthName "Restricted Files"
+   AuthUserFile /etc/phpmyadmin/.htpasswd
+   Require valid-user
+#############
+
+sudo htpasswd -c /etc/phpmyadmin/.htpasswd username
+sudo htpasswd /etc/phpmyadmin/.htpasswd additionaluser
+https://domain_name_or_IP/phpmyadmin
+
+
+demo project-Aws-labs
+=====================
+https://bitbucket.org/awslabs/aws-codedeploy-bitbucket-pipelines-python
+https://bitbucket.org/vijayraj1933/aws-code-deploy/src/master/
+https://bitbucket.org/sanjivak/sample/src/master/
+
+
+
+
+
+
+
+
+
+
+
+
